@@ -30,6 +30,7 @@ public class BudgetBase extends JPanel {    // based on Swing JPanel
     private JButton exitButton;        // Exit button
     private JTextField wagesField;     // Wages text field
     private JTextField loansField;     // Loans text field
+    private JTextField otherField;     // Other text field
     private JTextField totalIncomeField; // Total Income field
 
     // constructor - create UI  (dont need to change this)
@@ -67,23 +68,33 @@ public class BudgetBase extends JPanel {    // based on Swing JPanel
         loansField.setHorizontalAlignment(JTextField.RIGHT) ;    // number is at right end of field
         addComponent(loansField, 2, 1); 
 
+        // Row 3 - Loans label followed by loans textbox
+        JLabel otherLabel = new JLabel("Other");
+        addComponent(otherLabel, 3, 0);
+
+        // set up text box for entering other incomes
+    
+        otherField = new JTextField("", 10);   // blank initially, with 10 columns
+        otherField.setHorizontalAlignment(JTextField.RIGHT) ;    // number is at right end of field
+        addComponent(otherField, 3, 1); 
+
         // Row 3 - Total Income label followed by total income field
         JLabel totalIncomeLabel = new JLabel("Total Income");
-        addComponent(totalIncomeLabel, 3, 0);
+        addComponent(totalIncomeLabel, 4, 0);
 
         // set up text box for displaying total income.  Users cam view, but cannot directly edit it
         totalIncomeField = new JTextField("0", 10);   // 0 initially, with 10 columns
         totalIncomeField.setHorizontalAlignment(JTextField.RIGHT) ;    // number is at right end of field
         totalIncomeField.setEditable(false);    // user cannot directly edit this field (ie, it is read-only)
-        addComponent(totalIncomeField, 3, 1);  
+        addComponent(totalIncomeField, 4, 1);  
 
         // Row 4 - Calculate Button
         calculateButton = new JButton("Calculate");
-        addComponent(calculateButton, 4, 0);  
+        addComponent(calculateButton, 5, 0);  
 
         // Row 5 - Exit Button
         exitButton = new JButton("Exit");
-        addComponent(exitButton, 5, 0);  
+        addComponent(exitButton, 6, 0);  
 
         // set up  listeners (in a spearate method)
         initListeners();
@@ -125,16 +136,17 @@ public class BudgetBase extends JPanel {    // based on Swing JPanel
         // get values from income text fields.  valie is NaN if an error occurs
         double wages = getTextFieldValue(wagesField);
         double loans = getTextFieldValue(loansField);
+        double other =  getTextFieldValue(otherField);
 
         // clear total field and return if any value is NaN (error)
-        if (Double.isNaN(wages) || Double.isNaN(loans)) {
+        if (Double.isNaN(wages) || Double.isNaN(loans) || Double.isNaN(other)) {
             totalIncomeField.setText("");  // clear total income field
             wages = 0.0;
             return wages;   // exit method and do nothing
         }
 
         // otherwise calculate total income and update text field
-        double totalIncome = wages + loans;
+        double totalIncome = wages + loans + other;
         totalIncomeField.setText(String.format("%.2f",totalIncome));  // format with 2 digits after the .
         return totalIncome;
     }
