@@ -31,7 +31,11 @@ public class BudgetBase extends JPanel {    // based on Swing JPanel
     private JTextField wagesField;     // Wages text field
     private JTextField loansField;     // Loans text field
     private JTextField otherField;     // Other text field
+    private JTextField foodField;      // Food text field
+    private JTextField rentField;      // Rent text field
+    private JTextField otherSpendField; // Other Spending field
     private JTextField totalIncomeField; // Total Income field
+    private JTextField plusDefField;    // surplus/ deficit field
 
     // constructor - create UI  (dont need to change this)
     public BudgetBase(JFrame frame) {
@@ -40,61 +44,97 @@ public class BudgetBase extends JPanel {    // based on Swing JPanel
         initComponents();  // initalise components
     }
 
+    private JTextField makeTextField(String text, int col, boolean editable){
+        JTextField textField = new JTextField(text, col);
+        textField.setHorizontalAlignment((JTextField.RIGHT));
+        textField.setEditable(editable);
+        return textField;
+    }
+
     // initialise componenents
     // Note that this method is quite long.  Can be shortened by putting Action Listener stuff in a separate method
     // will be generated automatically by IntelliJ, Eclipse, etc
     private void initComponents() { 
 
-        // Top row (0) - "INCOME" label
+        // Top row (0) - "INCOME" label and SPENDING label
         JLabel incomeLabel = new JLabel("INCOME");
         addComponent(incomeLabel, 0, 0);
+
+        JLabel spendingLabel = new JLabel("SPENDING");
+        addComponent(spendingLabel, 0, 2);
 
         // Row 1 - Wages label followed by wages textbox
         JLabel wagesLabel = new JLabel("Wages");
         addComponent(wagesLabel, 1, 0);
 
         // set up text field for entering wages
-        // Could create method to do below (since this is done several times)
-        wagesField = new JTextField("", 10);   // blank initially, with 10 columns
-        wagesField.setHorizontalAlignment(JTextField.RIGHT) ;    // number is at right end of field
-        addComponent(wagesField, 1, 1);   
+        // have made make text field method
+        wagesField = makeTextField("", 10, true);
+        addComponent(wagesField,1,1);
+
+        // food label follwed by food textbox
+        JLabel foodLabel = new JLabel("Food");
+        addComponent(foodLabel, 1, 2);
+
+        //set up text field for enetring food cost
+        foodField = makeTextField("", 10, true);
+        addComponent(foodField,1,3);
 
         // Row 2 - Loans label followed by loans textbox
         JLabel loansLabel = new JLabel("Loans");
         addComponent(loansLabel, 2, 0);
 
         // set up text box for entering loans
-        loansField = new JTextField("", 10);   // blank initially, with 10 columns
-        loansField.setHorizontalAlignment(JTextField.RIGHT) ;    // number is at right end of field
+        loansField = makeTextField("", 10, true);
         addComponent(loansField, 2, 1); 
 
-        // Row 3 - Loans label followed by loans textbox
+        // rent label followed by rent textbox
+        JLabel rentLabel = new JLabel("Rent");
+        addComponent(rentLabel, 2, 2);
+
+        //set up text field for enetring rent cost
+        rentField = makeTextField("", 10, true);
+        addComponent(rentField,2,3);
+
+        // Row 3 - other label followed by other textbox
         JLabel otherLabel = new JLabel("Other");
         addComponent(otherLabel, 3, 0);
 
         // set up text box for entering other incomes
-    
-        otherField = new JTextField("", 10);   // blank initially, with 10 columns
-        otherField.setHorizontalAlignment(JTextField.RIGHT) ;    // number is at right end of field
+        otherField = makeTextField("", 10, true);
         addComponent(otherField, 3, 1); 
 
-        // Row 3 - Total Income label followed by total income field
+        // other spending label followed by other spending text box
+        JLabel OtherSpendLabel = new JLabel("Other");
+        addComponent(OtherSpendLabel, 3, 2);
+
+        //set up text field for enetring other spending
+        otherSpendField = makeTextField("", 10, true);
+        addComponent(otherSpendField,3,3);
+
+        // Row 4 - Total Income label followed by total income field
         JLabel totalIncomeLabel = new JLabel("Total Income");
         addComponent(totalIncomeLabel, 4, 0);
 
         // set up text box for displaying total income.  Users cam view, but cannot directly edit it
-        totalIncomeField = new JTextField("0", 10);   // 0 initially, with 10 columns
-        totalIncomeField.setHorizontalAlignment(JTextField.RIGHT) ;    // number is at right end of field
-        totalIncomeField.setEditable(false);    // user cannot directly edit this field (ie, it is read-only)
+        totalIncomeField = makeTextField("0", 10, false);
         addComponent(totalIncomeField, 4, 1);  
+       
+        // Row 5 - Total Income label followed by total income field
+        JLabel plusDeflLabel = new JLabel("Surplus/ Deficit  ");
+        addComponent(plusDeflLabel, 5, 0);
+        
+        // set up text box for displaying the surplus or deficit.  Users cam view, but cannot directly edit it
+        plusDefField = makeTextField("0", 5, false);
+        addComponent(plusDefField, 5, 1);  
 
-        // Row 4 - Calculate Button
+        // Row 6 - Calculate Button
         calculateButton = new JButton("Calculate");
-        addComponent(calculateButton, 5, 0);  
+        addComponent(calculateButton, 6, 0);  
 
-        // Row 5 - Exit Button
+        // Row 7 - Exit Button
         exitButton = new JButton("Exit");
-        addComponent(exitButton, 6, 0);  
+        addComponent(exitButton, 7, 0);  
 
         // set up  listeners (in a spearate method)
         initListeners();
@@ -189,6 +229,8 @@ public class BudgetBase extends JPanel {    // based on Swing JPanel
  
         //Display the window.
         frame.pack();
+        frame.setSize(1000, 500); // have default size thats not too small
+        frame.setLocationRelativeTo(null); // so it's in the centre of the screen
         frame.setVisible(true);
     }
  

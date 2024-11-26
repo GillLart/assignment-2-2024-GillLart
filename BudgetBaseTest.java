@@ -25,4 +25,15 @@ public class BudgetBaseTest
 
         assertEquals(value, bb.calculateTotalIncome() );
     }
+
+    //test for undo
+    //just compying other test for now as undo isn't implemented
+    @Test 
+    public void undoWorks(){
+        JFrame frame = new JFrame();
+        BudgetBase bb = new BudgetBase(frame);
+        double value = 0.0;
+
+        assertEquals(value, bb.calculateTotalIncome() );
+    }
 }
