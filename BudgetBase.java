@@ -36,6 +36,7 @@ public class BudgetBase extends JPanel {    // based on Swing JPanel
     private JTextField otherSpendField; // Other Spending field
     private JTextField totalIncomeField; // Total Income field
     private JTextField plusDefField;    // surplus/ deficit field
+    private String options[] = {"Per week", "Per month", "Per year"};
 
     // constructor - create UI  (dont need to change this)
     public BudgetBase(JFrame frame) {
@@ -56,14 +57,16 @@ public class BudgetBase extends JPanel {    // based on Swing JPanel
     // will be generated automatically by IntelliJ, Eclipse, etc
     private void initComponents() { 
 
-        // Top row (0) - "INCOME" label and SPENDING label
+        // --- Top row (0) ---
+        //INCOME label and SPENDING label
         JLabel incomeLabel = new JLabel("INCOME");
         addComponent(incomeLabel, 0, 0);
 
         JLabel spendingLabel = new JLabel("SPENDING");
-        addComponent(spendingLabel, 0, 2);
+        addComponent(spendingLabel, 0, 3);
 
-        // Row 1 - Wages label followed by wages textbox
+        // --- Row 1 ---
+        // Wages label followed by wages textbox
         JLabel wagesLabel = new JLabel("Wages");
         addComponent(wagesLabel, 1, 0);
 
@@ -72,15 +75,23 @@ public class BudgetBase extends JPanel {    // based on Swing JPanel
         wagesField = makeTextField("", 10, true);
         addComponent(wagesField,1,1);
 
+        JComboBox wageOptions = new JComboBox(options);
+        addComponent(wageOptions, 1, 2);
+
         // food label follwed by food textbox
         JLabel foodLabel = new JLabel("Food");
-        addComponent(foodLabel, 1, 2);
+        addComponent(foodLabel, 1, 3);
 
         //set up text field for enetring food cost
         foodField = makeTextField("", 10, true);
-        addComponent(foodField,1,3);
+        addComponent(foodField,1,4);
 
-        // Row 2 - Loans label followed by loans textbox
+        // set up drop down list (combo box) for the food cost field
+        JComboBox foodOptions = new JComboBox(options);
+        addComponent(foodOptions, 1, 5); 
+
+        // --- Row 2 --- 
+        //Loans label followed by loans textbox
         JLabel loansLabel = new JLabel("Loans");
         addComponent(loansLabel, 2, 0);
 
@@ -88,15 +99,24 @@ public class BudgetBase extends JPanel {    // based on Swing JPanel
         loansField = makeTextField("", 10, true);
         addComponent(loansField, 2, 1); 
 
+        // set up drop down list (combo box) for the loans field
+        JComboBox loanOptions = new JComboBox(options);
+        addComponent(loanOptions, 2, 2); 
+
         // rent label followed by rent textbox
         JLabel rentLabel = new JLabel("Rent");
-        addComponent(rentLabel, 2, 2);
+        addComponent(rentLabel, 2, 3);
 
         //set up text field for enetring rent cost
         rentField = makeTextField("", 10, true);
-        addComponent(rentField,2,3);
+        addComponent(rentField,2,4);
 
-        // Row 3 - other label followed by other textbox
+        // set up drop down list (combo box) for the rent field
+        JComboBox rentOptions = new JComboBox(options);
+        addComponent(rentOptions, 2, 5); 
+
+        // --- Row 3 ---
+        //other label followed by other textbox
         JLabel otherLabel = new JLabel("Other");
         addComponent(otherLabel, 3, 0);
 
@@ -104,15 +124,24 @@ public class BudgetBase extends JPanel {    // based on Swing JPanel
         otherField = makeTextField("", 10, true);
         addComponent(otherField, 3, 1); 
 
+        // set up drop down list (combo box) for the other field
+        JComboBox otherOptions = new JComboBox(options);
+        addComponent(otherOptions, 3, 2); 
+
         // other spending label followed by other spending text box
         JLabel OtherSpendLabel = new JLabel("Other");
-        addComponent(OtherSpendLabel, 3, 2);
+        addComponent(OtherSpendLabel, 3, 3);
 
         //set up text field for enetring other spending
         otherSpendField = makeTextField("", 10, true);
-        addComponent(otherSpendField,3,3);
+        addComponent(otherSpendField,3,4);
 
-        // Row 4 - Total Income label followed by total income field
+        // set up drop down list (combo box) for the other spending field
+        JComboBox otherSpendOptions = new JComboBox(options);
+        addComponent(otherSpendOptions, 3, 5); 
+
+        // --- Row 4 ---
+        //Total Income label followed by total income field
         JLabel totalIncomeLabel = new JLabel("Total Income");
         addComponent(totalIncomeLabel, 4, 0);
 
@@ -120,7 +149,8 @@ public class BudgetBase extends JPanel {    // based on Swing JPanel
         totalIncomeField = makeTextField("0", 10, false);
         addComponent(totalIncomeField, 4, 1);  
        
-        // Row 5 - Total Income label followed by total income field
+        // --- Row 5 ---
+        //Total Income label followed by total income field
         JLabel plusDeflLabel = new JLabel("Surplus/ Deficit  ");
         addComponent(plusDeflLabel, 5, 0);
         
@@ -128,11 +158,14 @@ public class BudgetBase extends JPanel {    // based on Swing JPanel
         plusDefField = makeTextField("0", 5, false);
         addComponent(plusDefField, 5, 1);  
 
-        // Row 6 - Calculate Button
+        // --- Row 6 --- 
+        //Calculate Button
         calculateButton = new JButton("Calculate");
         addComponent(calculateButton, 6, 0);  
 
-        // Row 7 - Exit Button
+
+        // ---Row 7 --- 
+        //Exit Button
         exitButton = new JButton("Exit");
         addComponent(exitButton, 7, 0);  
 
@@ -155,11 +188,10 @@ public class BudgetBase extends JPanel {    // based on Swing JPanel
         calculateButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 calculateTotalIncome();
+                calculateDeficitOrPlus();
             }
         });
-
     }
-
     // add a component at specified row and column in UI.  (0,0) is top-left corner
     private void addComponent(Component component, int gridrow, int gridcol) {
         layoutConstraints.fill = GridBagConstraints.HORIZONTAL;   // always use horixontsl filll
@@ -185,10 +217,29 @@ public class BudgetBase extends JPanel {    // based on Swing JPanel
             return wages;   // exit method and do nothing
         }
 
+
         // otherwise calculate total income and update text field
         double totalIncome = wages + loans + other;
         totalIncomeField.setText(String.format("%.2f",totalIncome));  // format with 2 digits after the .
         return totalIncome;
+    }
+
+    public double calculateDeficitOrPlus(){
+        double food = getTextFieldValue(foodField);
+        double rent = getTextFieldValue(rentField);
+        double other = getTextFieldValue(otherSpendField);
+
+        // clear total field and return if any value is NaN (error)
+        if (Double.isNaN(food) || Double.isNaN(rent) || Double.isNaN(other)) {
+            totalIncomeField.setText("");  // clear total income field
+            food = 0.0;
+            return food;   // exit method and do nothing
+        }
+
+        double profit = calculateTotalIncome()-(food+rent+other);
+        plusDefField.setText(String.format("%.2f", profit)); // format with 2 digits after the .
+        return profit;
+
     }
 
     // return the value if a text field as a double
